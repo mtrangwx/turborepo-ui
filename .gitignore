@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+dist-ssr
+storybook-static
+
+# Turbo
+.turbo
+
+# pnpm
+.pnpm-store
+.pnpm-debug.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*storybook.log
+
+# Test coverage
+coverage
+
+# Editor
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.sw?
+
+# OS
+.DS_Store
+*.pem

@@ -1,0 +1,39 @@
+# Azure DevOps Pipeline — placeholder for migration from npmjs.org to Azure Artifacts
+# Registry scope: @org/ui
+# Feed: https://pkgs.dev.azure.com/YOUR_ORG/_packaging/YOUR_FEED/npm/registry/
+#
+# Before activating:
+#   1. Rename the package in packages/ui/package.json to @org/ui
+#   2. Uncomment the "registry" field in publishConfig
+#   3. Add a .npmrc (or use npmAuthenticate) with scope -> feed mapping
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    displayName: Use Node 20
+    inputs:
+      versionSpec: "20.x"
+
+  - script: npm install -g pnpm@9
+    displayName: Install pnpm
+
+  - task: npmAuthenticate@0
+    displayName: Authenticate with Azure Artifacts
+    inputs:
+      workingFile: .npmrc
+
+  - script: pnpm install --frozen-lockfile
+    displayName: Install dependencies
+
+  - script: pnpm --filter @org/ui build
+    displayName: Build package
+
+  - script: pnpm changeset publish
+    displayName: Publish with Changesets
