@@ -22,6 +22,26 @@ pnpm --filter storybook storybook   # Runs Storybook dev server on port 6006
 pnpm --filter @mtrangio/ui typecheck
 ```
 
+### Testing
+
+Storybook stories are tested via Vitest + Playwright (headless Chromium). Run from `apps/storybook`:
+
+```bash
+pnpm --filter storybook vitest        # Run story tests (requires Storybook server or vitest plugin)
+```
+
+Tests are configured in `apps/storybook/vite.config.ts` using `@storybook/addon-vitest/vitest-plugin` and `@vitest/browser-playwright`.
+
+### Publishing (`@mtrangio/ui`)
+
+Releases use [Changesets](https://github.com/changesets/changesets):
+
+```bash
+pnpm changeset          # Create a new changeset (describe what changed)
+pnpm version-packages   # Bump versions based on changesets
+pnpm release            # Build @mtrangio/ui and publish to npm
+```
+
 ## Adding shadcn/ui Components
 
 Always run the shadcn CLI from the repo root with `-c apps/web`. Components are placed into `packages/ui/src/components/`, not into the app:
@@ -66,8 +86,8 @@ Vite 7 + React 19 app. Consumes `@mtrangio/ui` directly via workspace symlink. A
 ### apps/storybook
 
 Storybook 10 app using `@storybook/react-vite`. Stories are loaded from both:
-- `apps/storybook/src/**/*.stories.*`
-- `packages/ui/src/**/*.stories.*`
+- `apps/storybook/src/**/*.stories.*` — demo/example stories
+- `packages/ui/src/**/*.stories.*` — component stories colocated with the library (none yet; add stories here as components are developed)
 
 Storybook story files in `packages/ui/src` are excluded from the `build` Turbo task (see `turbo.json` inputs filter). Testing uses Vitest + `@storybook/addon-vitest` with Playwright for browser tests.
 
@@ -78,6 +98,10 @@ Storybook story files in `packages/ui/src` are excluded from the `build` Turbo t
 - Prettier with `prettier-plugin-tailwindcss` for class sorting
 
 ## Troubleshooting
+
+**`ERR_PNPM_OUTDATED_LOCKFILE` when running `pnpm install --frozen-lockfile`**
+
+`apps/storybook/package.json` has `"storybook": "^0.0.0"` which may diverge from the lockfile. For local development, run `pnpm install` (without `--frozen-lockfile`).
 
 **`EPERM: operation not permitted ::1:5173` when running `pnpm dev`**
 
