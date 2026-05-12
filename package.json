@@ -7,7 +7,7 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "turbo format",
-    "clean": "turbo run clean && rm -rf node_modules",
+    "clean": "turbo run clean && rm -rf node_modules dist",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build --filter=@mtrangio/ui && echo \"Releasing packages...\" && changeset publish",
