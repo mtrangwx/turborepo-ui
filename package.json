@@ -10,11 +10,11 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=@workspace/ui && echo \"Releasing packages...\" && changeset publish",
+    "release": "turbo run build --filter=@mtrangio/ui && echo \"Releasing packages...\" && changeset publish",
     "typecheck": "turbo typecheck"
   },
   "devDependencies": {
-    "@changesets/cli": "^3.0.0",
+    "@changesets/cli": "^2.31.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "turbo": "^2.8.17",

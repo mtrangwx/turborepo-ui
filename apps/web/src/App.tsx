@@ -1,6 +1,6 @@
-import { Button } from "@workspace/ui/components/button"
-import { Badge } from "@workspace/ui/components/badge"
-import { Checkbox } from "@workspace/ui/components/checkbox"
+import { Button } from "@mtrangio/ui/components/button"
+import { Badge } from "@mtrangio/ui/components/badge"
+import { Checkbox } from "@mtrangio/ui/components/checkbox"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu"
+} from "@mtrangio/ui/components/dropdown-menu"
 
 export function DropdownMenuDemo() {
   return (

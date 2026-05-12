@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/ui",
+  "name": "@mtrangio/ui",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -21,7 +21,7 @@
     "dist"
   ],
   "publishConfig": {
-    "name": "@my-org/ui",
+    "name": "@mtrangio/ui",
     "access": "public",
     "$comment": "For Azure Artifacts migration: change name to @org/ui and uncomment registry below",
     "_registry_azure": "https://pkgs.dev.azure.com/YOUR_ORG/_packaging/YOUR_FEED/npm/registry/"

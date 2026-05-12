@@ -11,7 +11,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@workspace/ui/*": ["./src/*"]
+      "@mtrangio/ui/*": ["./src/*"]
     }
   },
   "include": ["."],

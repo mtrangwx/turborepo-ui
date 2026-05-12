@@ -19,7 +19,7 @@ To run a command for a single package:
 ```bash
 pnpm --filter web dev
 pnpm --filter storybook storybook   # Runs Storybook dev server on port 6006
-pnpm --filter @workspace/ui typecheck
+pnpm --filter @mtrangio/ui typecheck
 ```
 
 ## Adding shadcn/ui Components
@@ -37,15 +37,15 @@ This is a **pnpm + Turborepo monorepo** with two workspaces:
 - `apps/` — runnable applications
 - `packages/` — shared libraries
 
-### packages/ui (`@workspace/ui`)
+### packages/ui (`@mtrangio/ui`)
 
 The shared component library. All shadcn/ui components live here. Source files are exposed directly via the `package.json` `exports` field — no build step required for development:
 
 ```
-@workspace/ui/globals.css   →  packages/ui/src/styles/globals.css
-@workspace/ui/components/*  →  packages/ui/src/components/*.tsx
-@workspace/ui/lib/*         →  packages/ui/src/lib/*.ts
-@workspace/ui/hooks/*       →  packages/ui/src/hooks/*.ts
+@mtrangio/ui/globals.css   →  packages/ui/src/styles/globals.css
+@mtrangio/ui/components/*  →  packages/ui/src/components/*.tsx
+@mtrangio/ui/lib/*         →  packages/ui/src/lib/*.ts
+@mtrangio/ui/hooks/*       →  packages/ui/src/hooks/*.ts
 ```
 
 These mappings exist in two places:
@@ -61,7 +61,7 @@ Current components: `badge`, `button`, `checkbox`, `dropdown-menu`
 
 ### apps/web
 
-Vite 7 + React 19 app. Consumes `@workspace/ui` directly via workspace symlink. Also has its own `components.json` for shadcn (points aliases to `@workspace/ui`). Local alias `@` resolves to `./src`.
+Vite 7 + React 19 app. Consumes `@mtrangio/ui` directly via workspace symlink. Also has its own `components.json` for shadcn (points aliases to `@mtrangio/ui`). Local alias `@` resolves to `./src`.
 
 ### apps/storybook
 
@@ -74,7 +74,7 @@ Storybook story files in `packages/ui/src` are excluded from the `build` Turbo t
 ### Key conventions
 
 - TypeScript strict mode throughout; `moduleResolution: bundler`
-- Within `packages/ui`, the path alias `@workspace/ui/*` resolves to `./src/*` (tsconfig paths)
+- Within `packages/ui`, the path alias `@mtrangio/ui/*` resolves to `./src/*` (tsconfig paths)
 - Prettier with `prettier-plugin-tailwindcss` for class sorting
 
 ## Troubleshooting
@@ -93,6 +93,6 @@ export default defineConfig({
 })
 ```
 
-**`Missing "./globals.css" specifier in "@workspace/ui" package`**
+**`Missing "./globals.css" specifier in "@mtrangio/ui" package`**
 
 Ensure the `exports` field in `packages/ui/package.json` includes the source path mappings (see Architecture section above). The `dist`-only exports are only sufficient for the published package, not for local development.
