@@ -26,7 +26,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@mtrangio/ui/*": ["../../packages/ui/src/*"]
+      "@workspace/ui/*": ["../../packages/ui/src/*"]
     }
   },
   "include": ["src"]

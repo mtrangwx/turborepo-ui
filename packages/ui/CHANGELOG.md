@@ -1,4 +1,4 @@
-# @mtrangio/ui
+# @workspace/ui
 
 ## 1.0.0
 

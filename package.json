@@ -10,7 +10,7 @@
     "clean": "turbo run clean && rm -rf node_modules dist",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=@mtrangio/ui && echo \"Releasing packages...\" && changeset publish",
+    "release": "turbo run build --filter=@workspace/ui && echo \"Releasing packages...\" && changeset publish",
     "typecheck": "turbo typecheck"
   },
   "devDependencies": {

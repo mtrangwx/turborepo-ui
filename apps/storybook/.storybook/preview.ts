@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react-vite"
 // @ts-expect-error: CSS import
-import "@mtrangio/ui/globals.css"
+import "@workspace/ui/globals.css"
 
 const preview: Preview = {
   parameters: {

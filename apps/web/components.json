@@ -14,8 +14,8 @@
     "components": "@/components",
     "hooks": "@/hooks",
     "lib": "@/lib",
-    "utils": "@mtrangio/ui/lib/utils",
-    "ui": "@mtrangio/ui/components"
+    "utils": "@workspace/ui/lib/utils",
+    "ui": "@workspace/ui/components"
   },
   "rtl": false,
   "menuColor": "default",

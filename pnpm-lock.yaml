@@ -26,7 +26,7 @@ importers:
 
   apps/storybook:
     dependencies:
-      '@mtrangio/ui':
+      '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       react:
@@ -111,7 +111,7 @@ importers:
 
   apps/web:
     dependencies:
-      '@mtrangio/ui':
+      '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       lucide-react:

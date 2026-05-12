@@ -35,7 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build package
-        run: pnpm --filter @mtrangio/ui build
+        run: pnpm --filter @workspace/ui build
 
       - name: Create Release PR or Publish
         uses: changesets/action@v1
