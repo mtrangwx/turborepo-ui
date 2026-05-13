@@ -18,7 +18,7 @@ To run a command for a single package:
 
 ```bash
 pnpm --filter web dev
-pnpm --filter storybook storybook   # Runs Storybook dev server on port 6006
+pnpm --filter mystorybook storybook   # Runs Storybook dev server on port 6006
 pnpm --filter @workspace/ui typecheck
 ```
 
@@ -27,7 +27,7 @@ pnpm --filter @workspace/ui typecheck
 Storybook stories are tested via Vitest + Playwright (headless Chromium). Run from `apps/storybook`:
 
 ```bash
-pnpm --filter storybook vitest        # Run story tests (requires Storybook server or vitest plugin)
+pnpm --filter mystorybook vitest      # Run story tests (requires Storybook server or vitest plugin)
 ```
 
 Tests are configured in `apps/storybook/vite.config.ts` using `@storybook/addon-vitest/vitest-plugin` and `@vitest/browser-playwright`.
@@ -59,13 +59,15 @@ This is a **pnpm + Turborepo monorepo** with two workspaces:
 
 ### packages/ui (`@workspace/ui`)
 
-The shared component library. All shadcn/ui components live here. Source files are exposed directly via the `package.json` `exports` field — no build step required for development:
+The shared component library. All shadcn/ui components live here. Individual component/lib/hooks paths resolve directly to source — no build step required for development:
 
 ```
-@workspace/ui/globals.css   →  packages/ui/src/styles/globals.css
-@workspace/ui/components/*  →  packages/ui/src/components/*.tsx
-@workspace/ui/lib/*         →  packages/ui/src/lib/*.ts
-@workspace/ui/hooks/*       →  packages/ui/src/hooks/*.ts
+@workspace/ui             →  packages/ui/dist/index.js  (built; for published package)
+@workspace/ui/styles.css  →  packages/ui/dist/index.css (built CSS; for published package)
+@workspace/ui/globals.css →  packages/ui/src/styles/globals.css
+@workspace/ui/components/* →  packages/ui/src/components/*.tsx
+@workspace/ui/lib/*        →  packages/ui/src/lib/*.ts
+@workspace/ui/hooks/*      →  packages/ui/src/hooks/*.ts
 ```
 
 These mappings exist in two places:
@@ -77,17 +79,22 @@ Current components: `badge`, `button`, `checkbox`, `dropdown-menu`
 - **shadcn config**: `radix-nova` style, Tailwind CSS v4, Lucide icons, CSS variables for theming
 - `src/lib/utils.ts` exports the `cn()` helper (clsx + tailwind-merge)
 - `src/styles/globals.css` is the Tailwind entry point — imported in `apps/web/src/main.tsx`
-- Built with `tsdown` for publishing (`pnpm build` outputs to `dist/`)
+- Uses `@fontsource-variable/geist` for the Geist variable font, `tw-animate-css` for animations
+- Uses `radix-ui` (unified package) rather than individual `@radix-ui/*` packages
+- Built with `tsdown` for publishing: `pnpm build` outputs ESM + CJS + types to `dist/`, plus compiled CSS
+- Published to npm as `@mtrangio/ui` (configured via `publishConfig.name` in `package.json`)
 
 ### apps/web
 
-Vite 7 + React 19 app. Consumes `@workspace/ui` directly via workspace symlink. Also has its own `components.json` for shadcn (points aliases to `@workspace/ui`). Local alias `@` resolves to `./src`.
+Vite 7 + React 19 app (`@vitejs/plugin-react` v5). Consumes `@workspace/ui` directly via workspace symlink. Also has its own `components.json` for shadcn (points aliases to `@workspace/ui`). Local alias `@` resolves to `./src`.
 
 ### apps/storybook
 
-Storybook 10 app using `@storybook/react-vite`. Stories are loaded from both:
+Package name: `mystorybook`. Storybook 10 app using `@storybook/react-vite`, Vite 8 + `@vitejs/plugin-react` v6. Stories are loaded from both:
 - `apps/storybook/src/**/*.stories.*` — demo/example stories
 - `packages/ui/src/**/*.stories.*` — component stories colocated with the library (none yet; add stories here as components are developed)
+
+Storybook addons: `@storybook/addon-vitest`, `@storybook/addon-a11y`, `@storybook/addon-docs`, `@chromatic-com/storybook`.
 
 Storybook story files in `packages/ui/src` are excluded from the `build` Turbo task (see `turbo.json` inputs filter). Testing uses Vitest + `@storybook/addon-vitest` with Playwright for browser tests.
 
@@ -101,7 +108,7 @@ Storybook story files in `packages/ui/src` are excluded from the `build` Turbo t
 
 **`ERR_PNPM_OUTDATED_LOCKFILE` when running `pnpm install --frozen-lockfile`**
 
-`apps/storybook/package.json` has `"storybook": "^0.0.0"` which may diverge from the lockfile. For local development, run `pnpm install` (without `--frozen-lockfile`).
+Run `pnpm install` (without `--frozen-lockfile`) to update the lockfile.
 
 **`EPERM: operation not permitted ::1:5173` when running `pnpm dev`**
 
