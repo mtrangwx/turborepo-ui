@@ -24,13 +24,13 @@ pnpm --filter @workspace/ui typecheck
 
 ### Testing
 
-Storybook stories are tested via Vitest + Playwright (headless Chromium). Run from `apps/mystorybook`:
+Storybook stories are tested via Vitest + Playwright (headless Chromium). Run from `apps/storybook`:
 
 ```bash
 pnpm --filter storybook vitest        # Run story tests (requires Storybook server or vitest plugin)
 ```
 
-Tests are configured in `apps/mystorybook/vite.config.ts` using `@storybook/addon-vitest/vitest-plugin` and `@vitest/browser-playwright`.
+Tests are configured in `apps/storybook/vite.config.ts` using `@storybook/addon-vitest/vitest-plugin` and `@vitest/browser-playwright`.
 
 ### Publishing (`@workspace/ui`)
 
@@ -83,10 +83,10 @@ Current components: `badge`, `button`, `checkbox`, `dropdown-menu`
 
 Vite 7 + React 19 app. Consumes `@workspace/ui` directly via workspace symlink. Also has its own `components.json` for shadcn (points aliases to `@workspace/ui`). Local alias `@` resolves to `./src`.
 
-### apps/mystorybook
+### apps/storybook
 
 Storybook 10 app using `@storybook/react-vite`. Stories are loaded from both:
-- `apps/mystorybook/src/**/*.stories.*` — demo/example stories
+- `apps/storybook/src/**/*.stories.*` — demo/example stories
 - `packages/ui/src/**/*.stories.*` — component stories colocated with the library (none yet; add stories here as components are developed)
 
 Storybook story files in `packages/ui/src` are excluded from the `build` Turbo task (see `turbo.json` inputs filter). Testing uses Vitest + `@storybook/addon-vitest` with Playwright for browser tests.
@@ -101,7 +101,7 @@ Storybook story files in `packages/ui/src` are excluded from the `build` Turbo t
 
 **`ERR_PNPM_OUTDATED_LOCKFILE` when running `pnpm install --frozen-lockfile`**
 
-`apps/mystorybook/package.json` has `"storybook": "^0.0.0"` which may diverge from the lockfile. For local development, run `pnpm install` (without `--frozen-lockfile`).
+`apps/storybook/package.json` has `"storybook": "^0.0.0"` which may diverge from the lockfile. For local development, run `pnpm install` (without `--frozen-lockfile`).
 
 **`EPERM: operation not permitted ::1:5173` when running `pnpm dev`**
 
