@@ -1,5 +1,5 @@
 {
-  "name": "storybook",
+  "name": "mystorybook",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -31,7 +31,7 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10",
-    "storybook": "^0.0.0",
+    "storybook": "^10.3.6",
     "@storybook/react-vite": "^10.3.6",
     "@chromatic-com/storybook": "^5.1.2",
     "@storybook/addon-vitest": "^10.3.6",
