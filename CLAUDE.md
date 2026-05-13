@@ -34,12 +34,46 @@ Tests are configured in `apps/storybook/vite.config.ts` using `@storybook/addon-
 
 ### Publishing (`@mtrangio/ui`)
 
-Releases use [Changesets](https://github.com/changesets/changesets):
+Releases use [Changesets](https://github.com/changesets/changesets) with a two-phase CI workflow:
 
+**Phase 1 — describe the change** (done by the developer):
 ```bash
-pnpm changeset          # Create a new changeset (describe what changed)
-pnpm version-packages   # Bump versions based on changesets
-pnpm release            # Build @mtrangio/ui and publish to npm
+pnpm changeset   # select @mtrangio/ui, choose patch/minor/major, write a summary
+git add .changeset/
+git commit -m "chore: add changeset"
+git push
+```
+
+**Phase 2 — version + publish** (handled by CI):
+1. The Changesets bot opens a **"Version Packages" PR** that bumps `packages/ui/package.json` and updates `CHANGELOG.md`.
+2. Review and merge the PR.
+3. CI detects the merge and runs `pnpm release`, which builds and publishes `@mtrangio/ui` to npm.
+
+> **Never run `pnpm version-packages` locally** unless you are intentionally managing the release outside CI — it writes the version bump to `packages/ui/package.json` before the package is published, which breaks `pnpm install` for anyone who pulls that commit before the publish completes.
+
+#### Key rule: `apps/web` must always use `workspace:*`
+
+`apps/web/package.json` must keep `"@mtrangio/ui": "workspace:*"`. Changesets leaves `workspace:*` references alone, so only `packages/ui/package.json` gets a version bump. If the specifier is changed to a registry version (e.g. `^1.0.2`), Changesets will try to update it on the next release cycle, causing `pnpm install --frozen-lockfile` to fail in CI because the new version isn't published yet.
+
+#### Testing the published package (alternatives)
+
+**Option A — scratch project (recommended):** Create a throwaway project outside the monorepo that installs from npm:
+```bash
+mkdir /tmp/test-ui && cd /tmp/test-ui
+npm init -y
+npm install @mtrangio/ui react react-dom radix-ui
+```
+
+**Option B — temporary registry override in apps/web:** Swap `workspace:*` to the registry version, test locally, then revert before committing. Never commit the registry specifier.
+```bash
+# in apps/web/package.json, temporarily:
+"@mtrangio/ui": "^1.0.2"
+pnpm install   # fetches from npm
+pnpm --filter web dev
+
+# revert when done:
+"@mtrangio/ui": "workspace:*"
+pnpm install
 ```
 
 ## Adding shadcn/ui Components
@@ -62,13 +96,15 @@ This is a **pnpm + Turborepo monorepo** with two workspaces:
 The shared component library. All shadcn/ui components live here. Individual component/lib/hooks paths resolve directly to source — no build step required for development:
 
 ```
-@mtrangio/ui             →  packages/ui/dist/index.js  (built; for published package)
-@mtrangio/ui/styles.css  →  packages/ui/dist/index.css (built CSS; for published package)
-@mtrangio/ui/globals.css →  packages/ui/src/styles/globals.css
-@mtrangio/ui/components/* →  packages/ui/src/components/*.tsx
-@mtrangio/ui/lib/*        →  packages/ui/src/lib/*.ts
-@mtrangio/ui/hooks/*      →  packages/ui/src/hooks/*.ts
+@mtrangio/ui             →  packages/ui/dist/index.mjs  (built; for published package)
+@mtrangio/ui/styles.css  →  packages/ui/dist/index.css  (built CSS; for published package)
+@mtrangio/ui/globals.css →  packages/ui/src/styles/globals.css  (source; local dev)
+@mtrangio/ui/components/* →  packages/ui/src/components/*.tsx   (source; local dev)
+@mtrangio/ui/lib/*        →  packages/ui/src/lib/*.ts            (source; local dev)
+@mtrangio/ui/hooks/*      →  packages/ui/src/hooks/*.ts          (source; local dev)
 ```
+
+`publishConfig.exports` in `packages/ui/package.json` overrides these to `dist/*.mjs`/`*.cjs`/`*.d.mts` paths for the published package. tsdown outputs `.mjs` (ESM) and `.cjs` (CJS) — the exports map must use those exact extensions.
 
 These mappings exist in two places:
 - `packages/ui/package.json` `exports` field — used by Vite/Node at runtime
@@ -108,7 +144,9 @@ Storybook story files in `packages/ui/src` are excluded from the `build` Turbo t
 
 **`ERR_PNPM_OUTDATED_LOCKFILE` when running `pnpm install --frozen-lockfile`**
 
-Run `pnpm install` (without `--frozen-lockfile`) to update the lockfile.
+Run `pnpm install` (without `--frozen-lockfile`) to update the lockfile, then commit `pnpm-lock.yaml`.
+
+Common cause in CI: the "Version Packages" PR bumped a version in `package.json` but the lockfile wasn't regenerated before pushing. Always run `pnpm install` and commit the lockfile after `pnpm version-packages`.
 
 **`EPERM: operation not permitted ::1:5173` when running `pnpm dev`**
 
