@@ -1,5 +1,11 @@
 # @mtrangio/ui
 
+## 1.0.2
+
+### Patch Changes
+
+- 668b901: Fix package exports to use correct .mjs/.d.mts extensions
+
 ## 1.0.1
 
 ### Patch Changes
