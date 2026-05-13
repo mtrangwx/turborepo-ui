@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/ui",
+  "name": "@mtrangio/ui",
   "version": "1.0.1",
   "type": "module",
   "main": "./dist/index.cjs",
