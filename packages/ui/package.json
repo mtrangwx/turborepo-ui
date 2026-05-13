@@ -3,13 +3,13 @@
   "version": "1.0.1",
   "type": "module",
   "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.mts"
     },
     "./styles.css": "./dist/index.css",
     "./globals.css": "./src/styles/globals.css",
@@ -27,26 +27,26 @@
     "_registry_azure": "https://pkgs.dev.azure.com/YOUR_ORG/_packaging/YOUR_FEED/npm/registry/",
     "exports": {
       ".": {
-        "import": "./dist/index.js",
+        "import": "./dist/index.mjs",
         "require": "./dist/index.cjs",
-        "types": "./dist/index.d.ts"
+        "types": "./dist/index.d.mts"
       },
       "./styles.css": "./dist/index.css",
       "./globals.css": "./dist/index.css",
       "./components/*": {
-        "import": "./dist/components/*.js",
+        "import": "./dist/components/*.mjs",
         "require": "./dist/components/*.cjs",
-        "types": "./dist/components/*.d.ts"
+        "types": "./dist/components/*.d.mts"
       },
       "./lib/*": {
-        "import": "./dist/lib/*.js",
+        "import": "./dist/lib/*.mjs",
         "require": "./dist/lib/*.cjs",
-        "types": "./dist/lib/*.d.ts"
+        "types": "./dist/lib/*.d.mts"
       },
       "./hooks/*": {
-        "import": "./dist/hooks/*.js",
+        "import": "./dist/hooks/*.mjs",
         "require": "./dist/hooks/*.cjs",
-        "types": "./dist/hooks/*.d.ts"
+        "types": "./dist/hooks/*.d.mts"
       }
     }
   },
@@ -57,21 +57,23 @@
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf .turbo node_modules dist"
   },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "radix-ui": ">=1"
+  },
   "dependencies": {
-    "@fontsource-variable/geist": "^5.2.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.14.0",
-    "radix-ui": "^1.4.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "shadcn": "^4.7.0",
-    "tailwind-merge": "^3.5.0",
-    "tw-animate-css": "^1.4.0",
-    "zod": "^3.25.76"
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0",
+    "@fontsource-variable/geist": "^5.2.8",
+    "shadcn": "^4.7.0",
+    "tw-animate-css": "^1.4.0",
+    "zod": "^3.25.76",
     "@eslint/js": "^9.39.2",
     "@tailwindcss/cli": "^4.1.18",
     "@tailwindcss/vite": "^4.1.18",
