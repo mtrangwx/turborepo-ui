@@ -13,7 +13,7 @@
     "clean": "rm -rf .turbo node_modules dist"
   },
   "dependencies": {
-    "@mtrangio/ui": "^1.0.1",
+    "@mtrangio/ui": "^1.0.2",
     "lucide-react": "^1.14.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
